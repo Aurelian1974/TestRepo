@@ -1,4 +1,7 @@
 ---
+name: typescript-react-standards
+description: "TypeScript and React standards, feature-sliced organization mirroring backend modules."
+applyTo: "**/*.ts,**/*.tsx"
 paths:
   - "**/*.ts"
   - "**/*.tsx"

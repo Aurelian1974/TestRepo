@@ -1,4 +1,7 @@
 ---
+name: csharp-standards
+description: "C# / .NET coding standards applied to all C# files."
+applyTo: "**/*.cs"
 paths:
   - "**/*.cs"
 ---

@@ -1,4 +1,7 @@
 ---
+name: test-standards
+description: "Testing standards for unit, integration and architecture tests."
+applyTo: "**/*Tests/**/*.cs,**/*.Tests/**/*.cs"
 paths:
   - "**/*Tests/**/*.cs"
   - "**/*.Tests/**/*.cs"

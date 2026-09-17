@@ -1,4 +1,7 @@
 ---
+name: architecture-docs
+description: "Rules for ADRs, the architecture profile, plans and orchestration state."
+applyTo: "docs/adr/**,.ai/architecture/**,.ai/plans/**,.ai/state/**"
 paths:
   - "docs/adr/**"
   - ".ai/architecture/**"

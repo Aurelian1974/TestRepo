@@ -4,7 +4,7 @@
   Generates tool-specific AI customization files from the canonical sources in .ai/kit and validates skills.
   Sources (edit these):  .ai/kit/core*.md · .ai/kit/roles/*.json|*.md · .ai/kit/rules/*.md · .claude/skills/** (shared, not generated)
   Outputs (never edit):  .github/copilot-instructions.md · CLAUDE.md · .github/agents/*.agent.md · .claude/agents/claude-*.md
-                         .github/instructions/*.instructions.md · .claude/rules/*.md
+                         .claude/rules/*.md (single copy read by both: `paths` for Claude Code, `applyTo` for VS Code)
 .PARAMETER Check
   Do not write. Exit 1 if any output is missing, stale, or orphaned, or validation fails. Use in CI / pre-commit.
 #>
@@ -99,10 +99,9 @@ foreach ($rule in Get-ChildItem (Join-Path $Kit 'rules') -Filter '*.md' | Sort-O
     if (-not $fm) { continue }
     $globs = @($fm.Meta['globs'] -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
     if (-not $globs) { $errors.Add("rule $($rule.Name): globs required") }
-    $copilotFm = @('---', "name: $($fm.Meta['name'])", "description: $(Q $fm.Meta['description'])", "applyTo: $(Q ($globs -join ','))", '---', $Marker) -join "`n"
-    $out[".github/instructions/$($rule.BaseName).instructions.md"] = "$copilotFm`n$($fm.Body)"
-    $claudeFm = (@('---', 'paths:') + @($globs | ForEach-Object { "  - $(Q $_)" }) + @('---', $Marker)) -join "`n"
-    $out[".claude/rules/$($rule.BaseName).md"] = "$claudeFm`n$($fm.Body)"
+    $ruleFm = (@('---', "name: $($fm.Meta['name'])", "description: $(Q $fm.Meta['description'])", "applyTo: $(Q ($globs -join ','))", 'paths:') +
+               @($globs | ForEach-Object { "  - $(Q $_)" }) + @('---', $Marker)) -join "`n"
+    $out[".claude/rules/$($rule.BaseName).md"] = "$ruleFm`n$($fm.Body)"
 }
 
 # ── Compare / write ──────────────────────────────────────────────────────────

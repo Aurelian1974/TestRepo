@@ -1,4 +1,7 @@
 ---
+name: tsql-standards
+description: "T-SQL standards for SQL scripts, stored procedures and migrations."
+applyTo: "**/*.sql"
 paths:
   - "**/*.sql"
 ---
