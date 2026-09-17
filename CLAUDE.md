@@ -31,7 +31,7 @@ Input is cheap; output is not. Read as much as needed; write as little as possib
 11. Artifacts (code, plans, state, ADRs, reports) in English. Chat replies in the user's language, terse.
 
 ## Done
-Build without new warnings; tests + architecture tests green; no `TODO(ai)` left in touched files; plan step ticked; state updated.
+Build without new warnings, with every touched source file compiled by a project; tests + architecture tests green; no `TODO(ai)` left in touched files; plan step ticked; state updated.
 
 ## Claude Code specifics
 - The main session is the orchestrator for M/L/XL work: follow skill `orchestration`, delegate with the Agent tool to `claude-<role>` subagents (`.claude/agents/`). Subagents have their skills preloaded.

@@ -44,6 +44,11 @@ if ($Init) {
             '^tool:'  { "tool: $(if ($Tool) { $Tool } else { 'unknown' })" }
             '^phase:' { 'phase: classify' }
             '^gate:'  { 'gate: none' }
+            '^class:' { 'class: unclassified' }
+            '^modules:' { 'modules: none' }
+            '^plan:'  { 'plan: none' }
+            '^steps:' { 'steps: none' }
+            '^next:'  { 'next: classify task' }
             '^- <'    { }                                  # drop placeholder list items
             default   { $_ }
         }

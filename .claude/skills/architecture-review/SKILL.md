@@ -59,6 +59,9 @@ user-invocable: false
 - [ ] Architecture tests updated when profile changed — MAJOR
 - [ ] Bugfix has a test that failed before the fix — MAJOR
 
+## 9. Code level (mandatory)
+Walk skill `code-quality` for every changed file (tracked and untracked), whole file, every line. Architecture findings do not replace code findings.
+
 ## Verdict
-`APPROVE` only with zero BLOCKER and zero MAJOR. Output format: reviewer OUT block (findings one line each, no passed checks).
-Each finding: `path:line — rule — problem — concrete fix`. No generic advice.
+`APPROVE` only with zero BLOCKER and zero MAJOR; minors are always listed. Output: reviewer OUT block.
+Each finding: `path:line | rule id | problem | concrete fix`. No generic advice.

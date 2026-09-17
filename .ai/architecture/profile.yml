@@ -22,14 +22,20 @@ conventions:
   validation: fluentvalidation      # fluentvalidation | data-annotations | manual
   error_model: result               # result (Result<T> + ProblemDetails) | exceptions
   data_access:
-    write: ef-core                  # ef-core | dapper | stored-procedures
+    write: dapper                   # ef-core | dapper | stored-procedures
     read: dapper                    # dapper | stored-procedures | ef-core-no-tracking | views
-  migrations: ef-migrations         # ef-migrations | dbup | sqlproj
+  migrations: dbup                  # ef-migrations | dbup | sqlproj
   time: timeprovider                # inject TimeProvider; never DateTime.Now in domain/app code
   testing:
     unit: xunit
     integration: testcontainers     # testcontainers | localdb | none
     architecture: netarchtest       # netarchtest | archunitnet
+
+database:
+  name: LocalTax
+  server: 'VALERIA'           # exact ca în SSMS: localhost, .\SQLEXPRESS, NUME-PC\INSTANTA
+  auth: windows               # windows | sql
+  created_by: user            # baza și schema le aplici tu; agenții doar scriu fișiere
 
 shared_kernel:                      # types every module may reference; keep this list tiny
   project: Company.Product.SharedKernel
@@ -60,6 +66,12 @@ rules:                              # extra, repo-specific rules; each becomes a
     enforce: test
   - id: R-002
     text: "No cross-schema joins in write paths. Reporting reads go through the Reporting module views."
+    enforce: review
+  - id: R-DB-01
+    text: "Agents never create, drop or migrate databases and never run sqlcmd, Invoke-Sqlcmd or dotnet ef database update. They only write migration/SQL files; the user applies them."
+    enforce: review
+  - id: R-DB-02
+    text: "Connection strings containing passwords never go into committed files; use user-secrets."
     enforce: review
 
 exceptions: []                      # - { rule: R-002, scope: "Reporting.Vat", adr: docs/adr/0007-... , expires: 2027-03-01 }

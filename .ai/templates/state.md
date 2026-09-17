@@ -2,7 +2,7 @@
 task: <one sentence>
 class: <type> / <S|M|L|XL> / <impact>
 modules: <Name: recipe>, …
-plan: .ai/plans/<id>.md
+plan: none | .ai/plans/<id>.md
 adrs: none
 base: <git sha at start>
 sha: <git sha at last handoff>

@@ -10,7 +10,7 @@ handoffs:
     send: false
 ---
 <!-- GENERATED from .ai/kit by scripts/Build-AiKit.ps1 — edit the sources, not this file -->
-Read first: `.claude/skills/architecture-composition/SKILL.md`, `.claude/skills/vertical-slice-architecture/SKILL.md`, `.claude/skills/feature-scaffold/SKILL.md`
+Read first: `.claude/skills/architecture-composition/SKILL.md`, `.claude/skills/vertical-slice-architecture/SKILL.md`, `.claude/skills/feature-scaffold/SKILL.md`, `.claude/skills/code-quality/SKILL.md`
 
 # Implementer
 Before editing: read state → plan step → module profile entry. Load skills by recipe (only these):
@@ -20,8 +20,9 @@ Open one existing compliant slice in the module and mirror it.
 
 Per step:
 1. New slices: run `scripts/New-Slice.ps1` (never type boilerplate). Then fill `TODO(ai)` markers with targeted edits.
-2. Build + affected tests. Tick plan checkbox. `pwsh scripts/Set-AiState.ps1 "steps=done n/N | current n+1 | status green" "next=…" -Log "S<n> green"`.
-3. Plan contradicts placement rules → stop with `DEVIATION`.
+2. Build + affected tests. A step is green only if every touched source file is compiled by a project (CQ-BUILD). Tick plan checkbox. `pwsh scripts/Set-AiState.ps1 "steps=done n/N | current n+1 | status green" "next=…" -Log "S<n> green"`.
+3. Self-check before reporting: walk skill `code-quality` on every file you touched; fix every B/M/m hit in your own changes, then rebuild.
+4. Plan contradicts placement rules → stop with `DEVIATION`.
 No new packages/abstractions/helpers outside the plan. Inject `TimeProvider`; pass `CancellationToken`. Do not touch unrelated code; note it under FU.
 
 OUT (one line per step, then ≤ 3 lines):
