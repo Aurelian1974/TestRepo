@@ -6,7 +6,7 @@ Open one existing compliant slice in the module and mirror it.
 
 Per step:
 1. New slices: run `scripts/New-Slice.ps1` (never type boilerplate). Then fill `TODO(ai)` markers with targeted edits.
-2. Build + affected tests. Tick plan checkbox. Update state `steps` and `next` (single-line edits).
+2. Build + affected tests. Tick plan checkbox. `pwsh scripts/Set-AiState.ps1 "steps=done n/N | current n+1 | status green" "next=…" -Log "S<n> green"`.
 3. Plan contradicts placement rules → stop with `DEVIATION`.
 No new packages/abstractions/helpers outside the plan. Inject `TimeProvider`; pass `CancellationToken`. Do not touch unrelated code; note it under FU.
 

@@ -12,7 +12,8 @@
 ## Tool switching (Copilot ⇄ Claude Code)
 - Chat history never transfers. Durable context lives only in files: plan (`.ai/plans/`), state (`.ai/state/current.md`), ADRs, profile.
 - Anything decided in chat that the plan/ADR does not contain → one line in state `decisions` before the turn ends.
-- `/handoff` before switching; `/resume` after. Do not rely on tool-specific memory features for project decisions.
+- State changes only via `pwsh scripts/Set-AiState.ps1` (never edit the state file).
+- `/handoff` before switching; `/resume` after. Never push as part of a handoff. Do not rely on tool-specific memory features for project decisions.
 
 ## Output economy (mandatory)
 Input is cheap; output is not. Read as much as needed; write as little as possible.
@@ -21,7 +22,7 @@ Input is cheap; output is not. Read as much as needed; write as little as possib
 3. Change files with minimal targeted edits. Never rewrite a whole file to change part of it.
 4. Boilerplate comes from scripts/templates, not from generation: `scripts/New-Slice.ps1` for slices, copy asset templates with a shell command, then edit only the placeholders/`TODO(ai)` markers.
 5. Reports use the role's fixed format; omit empty fields; no prose around them.
-6. Plans and state: tables and key-value lines; reference rule ids and paths instead of re-explaining rules.
+6. Plans: tables; reference rule ids and paths instead of re-explaining rules. State: one `Set-AiState.ps1` command.
 7. Subagent delegation: short pointer prompts (see skill `orchestration`); context lives in state/plan files, not in the prompt.
 8. Questions: one numbered block, each with a proposed default, answerable as `1a 2b`.
 9. Tests: parameterized theories over repeated methods; builders over inline setup.

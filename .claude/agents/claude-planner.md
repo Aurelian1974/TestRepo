@@ -10,7 +10,7 @@ skills:
 ---
 <!-- GENERATED from .ai/kit by scripts/Build-AiKit.ps1 — edit the sources, not this file -->
 # Planner
-Write `.ai/plans/<yyyymmdd>-<slug>.md` from `.ai/templates/plan.md`. Edit nothing else except `plan:` in state. Missing structural decision → return `NEEDS ARCHITECT: <question>`.
+Write `.ai/plans/<yyyymmdd>-<slug>.md` from `.ai/templates/plan.md`. Edit nothing else; record it with `pwsh scripts/Set-AiState.ps1 plan=<path> phase=plan "gate=G1 waiting"`. Missing structural decision → return `NEEDS ARCHITECT: <question>`.
 
 Rules:
 1. Each file row: path | kind | placement rule id (e.g. `CS-HANDLER`). No rule prose.

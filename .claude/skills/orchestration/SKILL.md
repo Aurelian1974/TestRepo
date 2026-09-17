@@ -8,6 +8,7 @@ user-invocable: false
 Role names are logical: Copilot agent `X` = Claude Code subagent `claude-X`.
 
 ## 1. Classify (write into state, not chat)
+Start: `pwsh scripts/Set-AiState.ps1 -Init -Task "<one sentence>" -Tool <copilot|claude-code>`, then set `class=` and `modules=`.
 - type: feature | bugfix | refactor | schema | new-module | architecture | migration | performance
 - size: **S** one slice/file area, no schema/contract · **M** one module, several slices or schema · **L** cross-module, new contract/event/aggregate · **XL** new module, recipe/topology change, style migration
 - impact: none | local | structural
@@ -16,7 +17,7 @@ Role names are logical: Copilot agent `X` = Claude Code subagent `claude-X`.
 ## 2. Pipeline
 | Class | Phases |
 |---|---|
-| S | implementer → reviewer |
+| S | implementer → reviewer (Copilot orchestrator never edits; Claude Code main session may do S directly) |
 | M | researcher → planner → **G1** → (db-engineer) → implementer → test-engineer → reviewer |
 | L | researcher → architect → planner → **G1** → (db-engineer) → implementer → test-engineer → reviewer |
 | XL / structural | researcher → architect → **G0** → planner → **G1** → … → reviewer |
@@ -40,20 +41,26 @@ Never paste plan/research content into prompts; persist it to files and point to
 Research output that later phases need → orchestrator appends a ≤ 10-line digest to state `notes`.
 
 ## 5. State file `.ai/state/current.md`
-Create from `.ai/templates/state.md` at classification. Afterwards change only single fields
-(`phase`, `gate`, `steps`, `next`, `tool`, `sha`) and append one `log` line per phase. Never rewrite.
-`decisions:` holds every chat-only agreement (one line each). This is what makes switching tools lossless.
+Written only through `scripts/Set-AiState.ps1` (one short command, no file editing):
+```
+pwsh scripts/Set-AiState.ps1 phase=plan "gate=G1 waiting" "next=planner: write plan"
+pwsh scripts/Set-AiState.ps1 -Decision "<chat-only agreement>" -Note "<research digest line>" -Log "<phase result>"
+pwsh scripts/Set-AiState.ps1 -Show
+```
+Fields: task class modules plan adrs base sha tool phase gate steps review_cycles next.
+`decisions` holds every chat-only agreement (one line each). This is what makes switching tools lossless.
+`-Init` archives the previous state to `.ai/state/archive/`.
 
 ## 6. Handoff (before switching tool or ending a session)
-1. If the current step is green and there are uncommitted changes: `git add -A && git commit -m "wip(ai): <task> S<n>"`. If red: do not commit; set `steps.current_status: red` and describe the failure in `next`.
-2. Update `sha` (`git rev-parse --short HEAD`), `tool` (copilot | claude-code), `next` (imperative, one line, executable without chat history), `decisions`.
+1. If the current step is green and there are uncommitted changes: `git add -A && git commit -m "wip(ai): <task> S<n>"` (Copilot orchestrator: delegate the commit to implementer). Never push. If red: do not commit; set `"steps=… | status red"` and describe the failure in `next`.
+2. `pwsh scripts/Set-AiState.ps1 -Handoff -Tool <copilot|claude-code> "next=<imperative, executable without chat history>"` (records sha); add `-Decision` for each chat-only agreement.
 3. Output only: `HANDOFF <sha> → next: <next>`.
 
 ## 7. Resume
 1. Read state → plan (current step only) → ADRs listed in state.
 2. `git log --oneline <sha>..HEAD` and `git status --short` — detect work done outside the recorded state.
 3. If state says red or git shows unexpected changes: run build + tests before continuing.
-4. Set `tool`, append log line, continue with `next`.
+4. `pwsh scripts/Set-AiState.ps1 -Tool <copilot|claude-code> -Log resumed`, continue with `next`.
 5. Output only: `RESUME <task> | phase <p> | S<n>/<total> | <next>`.
 
 ## 8. Sequential mode (no subagent tool, e.g. Visual Studio)

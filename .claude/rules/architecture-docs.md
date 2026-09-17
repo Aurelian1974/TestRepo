@@ -15,4 +15,4 @@ paths:
 - `profile.yml` changes require an ADR reference in the same change; keep `exceptions[]` time-boxed.
 - Plans follow `.ai/templates/plan.md`; tables and rule ids, no prose; no step may contain "TBD", "decide", "consider" or "maybe".
 - Write facts, numbers and decisions. No marketing language, no filler.
-- State `.ai/state/current.md`: edit single fields and append one log line; never rewrite the file.
+- State `.ai/state/current.md`: change only via `pwsh scripts/Set-AiState.ps1`; never edit the file.
