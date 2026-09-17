@@ -1,0 +1,15 @@
+---
+paths:
+  - "docs/adr/**"
+  - ".ai/architecture/**"
+  - ".ai/plans/**"
+  - ".ai/state/**"
+---
+<!-- GENERATED from .ai/kit by scripts/Build-AiKit.ps1 — edit the sources, not this file -->
+# Architecture documents
+
+- ADRs follow skill `adr` and `adr/assets/adr-template.md`; accepted ADRs are never edited, only superseded.
+- `profile.yml` changes require an ADR reference in the same change; keep `exceptions[]` time-boxed.
+- Plans follow `.ai/templates/plan.md`; tables and rule ids, no prose; no step may contain "TBD", "decide", "consider" or "maybe".
+- Write facts, numbers and decisions. No marketing language, no filler.
+- State `.ai/state/current.md`: edit single fields and append one log line; never rewrite the file.
